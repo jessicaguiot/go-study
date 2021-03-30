@@ -79,9 +79,9 @@ func main(){
 	if error != nil {
 		log.Panicln(error)
 	}
-	
+
 	defer r.Body.Close()
-	
+
 	if err := msgpack.NewDecoder(r.Body).Decode(&res); err != nil {
 		log.Panicln(err)
 	}
@@ -94,7 +94,7 @@ func main(){
 	}
 
 	resSession := make(map[uint32]SessionListRes)
-	
+
 	bufSession :=  new(bytes.Buffer)
 	msgpack.NewEncoder(bufSession).Encode(&reqSession)
 	response, error := http.Post(dest,"binary/message-pack", bufSession)
@@ -107,14 +107,14 @@ func main(){
 	if err := msgpack.NewDecoder(response.Body).Decode(&resSession); err != nil {
 		fmt.Println("error fazendo a conversão")
 		log.Panicln(err)
-	}	
+	}
 
 	fmt.Println("Sessions:")
 	for id, session := range resSession {
 		session.ID = id
 		resSession[id] = session
 	}
-	
+
 
 	fmt.Println(resSession)
 	for _, session := range resSession {
